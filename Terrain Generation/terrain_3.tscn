@@ -1,0 +1,59 @@
+[gd_scene load_steps=7 format=3 uid="uid://02vuf2m6ub5o"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_fj7yv"]
+size = Vector2(100, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_prllb"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_q7h17"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_q7h17"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w4fvv"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5xwiw"]
+
+[node name="Terrain0" type="MeshInstance3D"]
+mesh = SubResource("PlaneMesh_fj7yv")
+
+[node name="block_0" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="block_0"]
+shape = SubResource("BoxShape3D_prllb")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="block_0"]
+mesh = SubResource("BoxMesh_q7h17")
+
+[node name="Area3D" type="Area3D" parent="block_0"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="block_0/Area3D"]
+shape = SubResource("BoxShape3D_q7h17")
+
+[node name="block_1" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.72191, 0.5, -3.42389)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="block_1"]
+shape = SubResource("BoxShape3D_prllb")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="block_1"]
+mesh = SubResource("BoxMesh_q7h17")
+
+[node name="Area3D" type="Area3D" parent="block_1"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="block_1/Area3D"]
+shape = SubResource("BoxShape3D_w4fvv")
+
+[node name="block_2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.65462, 0.5, -8.59233)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="block_2"]
+shape = SubResource("BoxShape3D_prllb")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="block_2"]
+mesh = SubResource("BoxMesh_q7h17")
+
+[node name="Area3D" type="Area3D" parent="block_2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="block_2/Area3D"]
+shape = SubResource("BoxShape3D_5xwiw")

@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://bgcmyamfppj56"]
+
+[ext_resource type="Script" uid="uid://dnmo3yne411mc" path="res://terrain_controller.gd" id="1_g2k0x"]
+
+[node name="TerrainController" type="Node3D"]
+script = ExtResource("1_g2k0x")
+
+[node name="DespawnMarker" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0, 50)

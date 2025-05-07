@@ -1,0 +1,59 @@
+[gd_scene load_steps=7 format=3 uid="uid://dojes7k4sgys8"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_fj7yv"]
+size = Vector2(100, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6jvd0"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_ivdbs"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ivdbs"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_su7sv"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wxmnb"]
+
+[node name="Terrain0" type="MeshInstance3D"]
+mesh = SubResource("PlaneMesh_fj7yv")
+
+[node name="Block_0" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0757039, 0.5, -3.19454)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Block_0"]
+shape = SubResource("BoxShape3D_6jvd0")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Block_0"]
+mesh = SubResource("BoxMesh_ivdbs")
+
+[node name="Area3D" type="Area3D" parent="Block_0"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Block_0/Area3D"]
+shape = SubResource("BoxShape3D_ivdbs")
+
+[node name="Block_1" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.11073, 0.5, -1.36913)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Block_1"]
+shape = SubResource("BoxShape3D_6jvd0")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Block_1"]
+mesh = SubResource("BoxMesh_ivdbs")
+
+[node name="Area3D" type="Area3D" parent="Block_1"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Block_1/Area3D"]
+shape = SubResource("BoxShape3D_su7sv")
+
+[node name="Block_2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.92447, 0.5, -6.07353)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Block_2"]
+shape = SubResource("BoxShape3D_6jvd0")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Block_2"]
+mesh = SubResource("BoxMesh_ivdbs")
+
+[node name="Area3D" type="Area3D" parent="Block_2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Block_2/Area3D"]
+shape = SubResource("BoxShape3D_wxmnb")

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Wheels" load_steps=2 format=3 uid="uid://bs1fkwv3sfbm4"]
+
+[ext_resource type="Script" uid="uid://caj8wn8i3kdfo" path="res://Vehicles/Wheels.gd" id="1_y8vs1"]
+
+[resource]
+script = ExtResource("1_y8vs1")
+display_name = "Rollerskates"
+move_speed = 10.0
+max_stamina = 50
+metadata/_custom_type_script = "uid://caj8wn8i3kdfo"

@@ -1,0 +1,18 @@
+ea4bc82a6ad023ab7ee23ee620429895
+::res://::1746651666
+icon.svg::CompressedTexture2D/CompressedTexture2D::3545517198945612622::1746608001::1746649212::1::::<><><>0<>0<>40d93b3dee9ba7925ebb3e62783583d6<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
+player.gd::GDScript::738868661140814736::1746651565::0::1::::<>CharacterBody3D<><>0<>0<><>::
+README.md::TextFile/TextFile::-1::1746606392::0::1::::<><><>0<>0<><>::
+terrain_controller.gd::GDScript/GDScript::8097390872414917730::1746645575::0::1::::TerrainController<>Node3D<><>0<>0<><>::
+terrain_controller.tscn::PackedScene/PackedScene::2812453982781806151::1746646512::0::1::::<><><>0<>0<><>::uid://dnmo3yne411mc::::res://terrain_controller.gd
+world.tscn::PackedScene::6540979714481947870::1746651587::0::1::::<><><>0<>0<><>::uid://kr6cac70yja3::::res://player.gd<>uid://bgcmyamfppj56::::res://terrain_controller.tscn
+::res://Terrain Generation/::1746649010
+terrain_0.tscn::PackedScene/PackedScene::1097728902438636559::1746648159::0::1::::<><><>0<>0<><>::
+terrain_1.tscn::PackedScene/PackedScene::2829641439839834888::1746648067::0::1::::<><><>0<>0<><>::
+terrain_2.tscn::PackedScene/PackedScene::7454898878613447133::1746648231::0::1::::<><><>0<>0<><>::
+terrain_3.tscn::PackedScene/PackedScene::1811770367950526942::1746649010::0::1::::<><><>0<>0<><>::
+terrain_4.tscn::PackedScene/PackedScene::8160761971596842837::1746648194::0::1::::<><><>0<>0<><>::
+::res://Vehicles/::1746650948
+rollerskates.tres::Resource/Wheels::3703816322937159361::1746650948::0::1::::<><><>0<>0<><>::uid://caj8wn8i3kdfo::::res://Vehicles/Wheels.gd
+skateboard.tres::Resource/Wheels::8180235561891356251::1746650948::0::1::::<><><>0<>0<><>::uid://caj8wn8i3kdfo::::res://Vehicles/Wheels.gd
+Wheels.gd::GDScript::4793464449583336212::1746650948::0::1::::Wheels<>Resource<><>0<>0<><>::
