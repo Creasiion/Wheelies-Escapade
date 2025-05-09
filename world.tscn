@@ -5,7 +5,7 @@
 [ext_resource type="Resource" uid="uid://dostjw7hy64l0" path="res://Vehicles/skateboard.tres" id="3_dwbse"]
 [ext_resource type="PackedScene" uid="uid://bgcmyamfppj56" path="res://terrain_controller.tscn" id="3_tlwt5"]
 [ext_resource type="Resource" uid="uid://bs1fkwv3sfbm4" path="res://Vehicles/rollerskates.tres" id="4_pkg7o"]
-[ext_resource type="PackedScene" uid="uid://dnd6bfxj2jk12" path="res://ingame_ui.tscn" id="6_dwbse"]
+[ext_resource type="PackedScene" uid="uid://dnd6bfxj2jk12" path="res://HUD.tscn" id="6_dwbse"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gv5m4"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -53,9 +53,18 @@ transform = Transform3D(0.989536, 0, -0.144287, 0, 1, 0, 0.144287, 0, 0.989536, 
 
 [node name="Sprite3D" type="Sprite3D" parent="Player"]
 
+[node name="CollideCooldown" type="Timer" parent="Player"]
+wait_time = 2.0
+one_shot = true
+
+[node name="StaminaRegen" type="Timer" parent="Player"]
+wait_time = 2.0
+
 [node name="TerrainController" parent="." instance=ExtResource("3_tlwt5")]
 
 [node name="General Flooring" type="MeshInstance3D" parent="."]
 mesh = SubResource("PlaneMesh_fj7yv")
 
 [node name="Ingame UI" parent="." instance=ExtResource("6_dwbse")]
+
+[connection signal="timeout" from="Player/StaminaRegen" to="Player" method="_on_stamina_regen_timeout"]

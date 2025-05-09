@@ -20,6 +20,7 @@ func _ready():
 		hud.show()
 		
 	apply_wheels()
+	$StaminaRegen.start()
 
 func _physics_process(_delta: float) -> void:
 
@@ -33,18 +34,42 @@ func _physics_process(_delta: float) -> void:
 
 	move_and_slide()
 	
+	check_collisions()
+	
 	# Switch wheels when Down Arrow or S is pressed
 	if Input.is_action_just_pressed("ui_down"):
 		switch_wheels()
+
+func check_collisions():
+	if not $CollideCooldown.is_stopped():
+		return  # Cooldown active
+
+	var collision = get_last_slide_collision()
+	if collision:
+		var collider = collision.get_collider()
+		if collider:
+			stamina -= 15
+			update_hud()
+			$CollideCooldown.start()
+
+			velocity.z = 0 # Don't go backwards after colliding
+
+			if stamina <= 0:
+				print("GAME OVER!")
+				get_tree().quit()
+
+
 
 func switch_wheels():
 	current_wheel_index = (current_wheel_index + 1) % wheel_options.size()
 	wheels = wheel_options[current_wheel_index]
 	apply_wheels()
-	print("Switched to: ", wheels.display_name, " | Speed: ", move_speed)
 	
 func apply_wheels():
-	stamina = wheels.max_stamina
+	if stamina == 0:
+		stamina = wheels.max_stamina
+	else:
+		stamina = min(stamina, wheels.max_stamina)
 	move_speed = wheels.move_speed
 	$Sprite3D.texture = wheels.character_sprite
 	update_hud()
@@ -56,8 +81,14 @@ func update_hud():
 	var stamina_bar = hud.get_node("StaminaBar")
 	stamina_bar.max_value = wheels.max_stamina
 	stamina_bar.value = stamina
-	stamina_bar.get_node("StaminaLabelText").text = "Stamina: " + str(round(stamina)) + "%"
+	stamina_bar.get_node("StaminaLabelText").text = "Stamina: " + str(stamina) + " / " + str(wheels.max_stamina)
 	
 	hud.get_node("WheelsLabel").text = "Wheels: " + wheels.display_name
 
 	#hud.get_node("ScoreLabel").text = "Score: " + str(score)
+
+
+func _on_stamina_regen_timeout() -> void:
+	if stamina < wheels.max_stamina:
+		stamina += 1
+		update_hud()

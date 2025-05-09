@@ -1,3 +1,4 @@
 res://ingame_ui.tscn
 res://world.tscn
 res://player.gd
+res://HUD.tscn
