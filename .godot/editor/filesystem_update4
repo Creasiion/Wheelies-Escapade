@@ -1,11 +1,3 @@
+res://ingame_ui.tscn
 res://world.tscn
-res://Vehicles/rollerskates.tres
-res://Vehicles/skateboard.tres
 res://player.gd
-res://terrain_controller.gd
-res://Terrain Generation/terrain_0.tscn
-res://Terrain Generation/terrain_1.tscn
-res://Terrain Generation/terrain_2.tscn
-res://Terrain Generation/terrain_3.tscn
-res://Terrain Generation/terrain_4.tscn
-res://terrain_controller.tscn

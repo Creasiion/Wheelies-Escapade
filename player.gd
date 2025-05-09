@@ -9,11 +9,17 @@ var wheels: Wheels
 var stamina: int
 var move_speed: float
 var current_wheel_index := 0
+var hud: Node = null
 
 func _ready():
 	if wheel_options.size() > 0:
 		wheels = wheel_options[current_wheel_index]
-		apply_wheels()
+		
+	hud = get_node_or_null("/root/World/Ingame UI")
+	if hud:
+		hud.show()
+		
+	apply_wheels()
 
 func _physics_process(_delta: float) -> void:
 
@@ -25,13 +31,11 @@ func _physics_process(_delta: float) -> void:
 	else:
 		velocity.x = move_toward(velocity.x, 0, move_speed)
 
-
 	move_and_slide()
 	
 	# Switch wheels when Down Arrow or S is pressed
 	if Input.is_action_just_pressed("ui_down"):
 		switch_wheels()
-
 
 func switch_wheels():
 	current_wheel_index = (current_wheel_index + 1) % wheel_options.size()
@@ -43,3 +47,17 @@ func apply_wheels():
 	stamina = wheels.max_stamina
 	move_speed = wheels.move_speed
 	$Sprite3D.texture = wheels.character_sprite
+	update_hud()
+		
+
+func update_hud():
+	if not hud:
+		return
+	var stamina_bar = hud.get_node("StaminaBar")
+	stamina_bar.max_value = wheels.max_stamina
+	stamina_bar.value = stamina
+	stamina_bar.get_node("StaminaLabelText").text = "Stamina: " + str(round(stamina)) + "%"
+	
+	hud.get_node("WheelsLabel").text = "Wheels: " + wheels.display_name
+
+	#hud.get_node("ScoreLabel").text = "Score: " + str(score)
