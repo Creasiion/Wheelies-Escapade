@@ -16,6 +16,9 @@ const POOL_SIZE_PER_TYPE := 5
 var current_exit_transform: Transform3D
 var player: Node3D
 const BLOCK_LENGTH: int = 10.0
+const STEP := PI/4.0
+var last_entry_block: Node3D = null
+var last_snapped_yaw: float = 0.0
 
 func _ready() -> void:
 	player = get_node_or_null("/root/World/Player")
@@ -49,14 +52,14 @@ func _initialize_pools() -> void:
 func _init_blocks(count: int) -> void:
 	for i in range(count):
 		var scene: PackedScene
-		if i < 4: # Make the first 4 blocks just the straight path
+		if i < 4: # Make the first 4 blocks is just the straight path
 			scene = _get_scene_by_name("StraightPath")
 		else:
 			scene = TerrainBlocks.pick_random()
 
 		var block = _get_pooled_block(scene)
 
-		var entry = block.get_node("Entry")
+		var entry = block.get_node("Entry") as Area3D
 		if i == 0:
 			block.global_transform = Transform3D.IDENTITY.translated(-entry.position)
 		else:
@@ -64,6 +67,14 @@ func _init_blocks(count: int) -> void:
 			
 		block.visible = true
 		block.global_position.y = 0
+
+		if entry:
+			var sig = entry.body_entered
+			var cb = Callable(self, "_on_entry_zone_entered").bind(block)
+			if not sig.is_connected(cb):
+				sig.connect(cb)
+
+		
 		terrain_belt.append(block)
 
 		var exit_marker = _get_exit_marker(block)
@@ -105,28 +116,24 @@ func _manage_terrain(player_z: float) -> void:
 
 	# Placing block on path
 	var new_block = _get_pooled_block(scene)
-	var entry = new_block.get_node("Entry")
+	var entry = new_block.get_node_or_null("Entry") as Area3D
 
 	new_block.global_transform = current_exit_transform * entry.transform.affine_inverse()
 	new_block.global_position.y = 0
 	new_block.visible = true
+	
+	if entry:
+		var sig = entry.body_entered
+		var cb = Callable(self, "_on_entry_zone_entered").bind(new_block)
+		if not sig.is_connected(cb):
+			sig.connect(cb)
+	
 	terrain_belt.append(new_block)
 
 	# Updating current exit
 	var exit_marker = _get_exit_marker(new_block)
 	if exit_marker:
 		current_exit_transform = exit_marker.global_transform
-
-	# Change the rotation of the player when there's a turning/branching path
-	if player:
-		var pivot = player.get_node("CameraPivot")
-		var raw_angle = current_exit_transform.basis.get_euler().y
-		var snapped = round(raw_angle / (PI/4.0)) * (PI/4.0)
-		if not is_equal_approx(pivot.target_yaw, snapped):
-			pivot.target_yaw = snapped
-
-# how many units ahead of the player we want blocks to exist
-var lookahead_distance := lookahead_blocks * BLOCK_LENGTH
 
 func _needs_more_blocks_ahead(player_z: float) -> bool:
 	if terrain_belt.is_empty():
@@ -138,6 +145,25 @@ func _needs_more_blocks_ahead(player_z: float) -> bool:
 		return prev_block.has_meta("last_direction")
 	
 	return exit_z > player_z - (lookahead_blocks * BLOCK_LENGTH)
+
+func _on_entry_zone_entered(body: Node, block_ref: Node3D) -> void:
+	if body != player:
+		return
+	if block_ref == last_entry_block:
+		return
+	last_entry_block = block_ref
+
+	# compute snapped yaw…
+	var raw_yaw = current_exit_transform.basis.get_euler().y
+	var snapped = round(raw_yaw / STEP) * STEP
+	
+	if is_equal_approx(snapped, last_snapped_yaw):
+		return
+	last_snapped_yaw = snapped
+	
+	player.rotation.y = snapped
+	var pivot = player.get_node("CameraPivot") as Node3D
+	pivot.target_yaw = snapped
 
 
 func _get_pooled_block(scene: PackedScene) -> Node3D:

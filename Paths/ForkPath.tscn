@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://cx1t5wdfnvdq"]
+[gd_scene load_steps=7 format=3 uid="uid://cx1t5wdfnvdq"]
 
 [ext_resource type="Script" uid="uid://ma6ekcmmnm10" path="res://ForkPath.gd" id="1_vdam3"]
 
@@ -7,6 +7,8 @@ albedo_color = Color(0.34902, 1, 0.301961, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vdam3"]
 albedo_color = Color(0.847059, 0.054902, 0.156863, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_26mni"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rwxoh"]
 
@@ -25,8 +27,11 @@ transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 
 size = Vector3(4, 0.5, 10)
 material = SubResource("StandardMaterial3D_vdam3")
 
-[node name="Entry" type="Marker3D" parent="."]
+[node name="Entry" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.492668)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Entry"]
+shape = SubResource("BoxShape3D_26mni")
 
 [node name="LeftExit" type="Marker3D" parent="."]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -8.67, 0, -8.9)

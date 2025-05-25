@@ -1,7 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://dgrh0lprmstwn"]
+[gd_scene load_steps=3 format=3 uid="uid://dgrh0lprmstwn"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1t5tv"]
 albedo_color = Color(0, 0.499349, 0.627398, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1t5tv"]
 
 [node name="StraightPath" type="Node3D"]
 
@@ -10,8 +12,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
 size = Vector3(4, 0.5, 10)
 material = SubResource("StandardMaterial3D_1t5tv")
 
-[node name="Entry" type="Marker3D" parent="."]
+[node name="Entry" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Entry"]
+shape = SubResource("BoxShape3D_1t5tv")
 
 [node name="Exit" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
