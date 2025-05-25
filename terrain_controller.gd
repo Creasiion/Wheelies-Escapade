@@ -119,9 +119,10 @@ func _manage_terrain(player_z: float) -> void:
 
 	# Change the rotation of the player when there's a turning/branching path
 	if player:
-		var target_y = current_exit_transform.basis.get_euler().y
-		if not is_equal_approx(player.rotation.y, target_y):
-			player.rotation.y = target_y
+		var pivot = player.get_node("CameraPivot") as Node3D
+		var raw_angle = current_exit_transform.basis.get_euler().y
+		var snapped = round(raw_angle / (PI/4.0)) * (PI/4.0)
+		pivot.target_y = snapped
 
 # how many units ahead of the player we want blocks to exist
 var lookahead_distance := lookahead_blocks * BLOCK_LENGTH
