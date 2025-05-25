@@ -1,10 +1,11 @@
-[gd_scene load_steps=13 format=3 uid="uid://c0gq8lfxiwhso"]
+[gd_scene load_steps=14 format=3 uid="uid://c0gq8lfxiwhso"]
 
 [ext_resource type="Script" uid="uid://kr6cac70yja3" path="res://player.gd" id="1_f3sb7"]
 [ext_resource type="Script" uid="uid://caj8wn8i3kdfo" path="res://Vehicles/Wheels.gd" id="2_036b0"]
 [ext_resource type="Resource" uid="uid://dostjw7hy64l0" path="res://Vehicles/skateboard.tres" id="3_dwbse"]
 [ext_resource type="PackedScene" uid="uid://bgcmyamfppj56" path="res://terrain_controller.tscn" id="3_tlwt5"]
 [ext_resource type="Resource" uid="uid://bs1fkwv3sfbm4" path="res://Vehicles/rollerskates.tres" id="4_pkg7o"]
+[ext_resource type="Script" uid="uid://cgv6vfg4jl1t5" path="res://CameraPivot.gd" id="5_pkg7o"]
 [ext_resource type="PackedScene" uid="uid://dnd6bfxj2jk12" path="res://HUD.tscn" id="6_dwbse"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gv5m4"]
@@ -48,9 +49,6 @@ shape = SubResource("CapsuleShape3D_gv5m4")
 mesh = SubResource("CapsuleMesh_f3sb7")
 skeleton = NodePath("../CollisionShape3D")
 
-[node name="Camera3D" type="Camera3D" parent="Player"]
-transform = Transform3D(0.989536, 0, -0.144287, 0, 1, 0, 0.144287, 0, 0.989536, -3.32327, 0.24958, 3.32679)
-
 [node name="Sprite3D" type="Sprite3D" parent="Player"]
 
 [node name="CollideCooldown" type="Timer" parent="Player"]
@@ -59,6 +57,12 @@ one_shot = true
 
 [node name="StaminaRegen" type="Timer" parent="Player"]
 wait_time = 2.0
+
+[node name="CameraPivot" type="Node3D" parent="Player"]
+script = ExtResource("5_pkg7o")
+
+[node name="Camera3D" type="Camera3D" parent="Player/CameraPivot"]
+transform = Transform3D(0.989536, 0, -0.144287, 0, 1, 0, 0.144287, 0, 0.989536, -3.32327, 0.24958, 3.32679)
 
 [node name="TerrainController" parent="." instance=ExtResource("3_tlwt5")]
 

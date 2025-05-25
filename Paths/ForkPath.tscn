@@ -1,0 +1,47 @@
+[gd_scene load_steps=6 format=3 uid="uid://cx1t5wdfnvdq"]
+
+[ext_resource type="Script" uid="uid://ma6ekcmmnm10" path="res://ForkPath.gd" id="1_vdam3"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rwxoh"]
+albedo_color = Color(0.34902, 1, 0.301961, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vdam3"]
+albedo_color = Color(0.847059, 0.054902, 0.156863, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rwxoh"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vdam3"]
+
+[node name="ForkPath" type="Node3D"]
+script = ExtResource("1_vdam3")
+
+[node name="LeftBranch" type="CSGBox3D" parent="."]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -5, -0.25, -5)
+size = Vector3(4, 0.5, 10)
+material = SubResource("StandardMaterial3D_rwxoh")
+
+[node name="RightBranch" type="CSGBox3D" parent="."]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 5, -0.25, -5)
+size = Vector3(4, 0.5, 10)
+material = SubResource("StandardMaterial3D_vdam3")
+
+[node name="Entry" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.492668)
+
+[node name="LeftExit" type="Marker3D" parent="."]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -8.67, 0, -8.9)
+
+[node name="RightExit" type="Marker3D" parent="."]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 8.66971, 0, -8.9442)
+
+[node name="LeftZone" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.45387, 0, -3.42838)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LeftZone"]
+shape = SubResource("BoxShape3D_rwxoh")
+
+[node name="RightZone" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4, 0, -3.4)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RightZone"]
+shape = SubResource("BoxShape3D_vdam3")

@@ -24,13 +24,10 @@ func _ready():
 
 func _physics_process(_delta: float) -> void:
 
-	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down") #Only allow movement of left and right
 
-	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	if direction:
-		velocity.x = direction.x * move_speed
-	else:
-		velocity.x = move_toward(velocity.x, 0, move_speed)
+	velocity.x = input_dir.x * move_speed
+	velocity.z = -move_speed
 
 	move_and_slide()
 	
@@ -86,7 +83,6 @@ func update_hud():
 	hud.get_node("WheelsLabel").text = "Wheels: " + wheels.display_name
 
 	#hud.get_node("ScoreLabel").text = "Score: " + str(score)
-
 
 func _on_stamina_regen_timeout() -> void:
 	if stamina < wheels.max_stamina:

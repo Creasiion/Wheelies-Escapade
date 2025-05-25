@@ -1,4 +1,9 @@
-res://ingame_ui.tscn
+res://Paths/ForkPath.tscn
+res://terrain_controller.gd
+res://Paths/RightTurnPath.tscn
+res://Paths/LeftTurnPath.tscn
+res://Paths/StraightPath.tscn
+res://terrain_controller.tscn
+res://ForkPath.gd
 res://world.tscn
-res://player.gd
-res://HUD.tscn
+res://CameraPivot.gd
