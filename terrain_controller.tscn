@@ -1,9 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://bgcmyamfppj56"]
+[gd_scene load_steps=3 format=3 uid="uid://bgcmyamfppj56"]
 
 [ext_resource type="Script" uid="uid://dnmo3yne411mc" path="res://terrain_controller.gd" id="1_g2k0x"]
+[ext_resource type="Script" uid="uid://bbsr4odtn581r" path="res://ObstacleSpawner.gd" id="2_3oll3"]
 
 [node name="TerrainController" type="Node3D"]
 script = ExtResource("1_g2k0x")
 
 [node name="DespawnMarker" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0, 50)
+
+[node name="ObstacleSpawner" type="Node" parent="."]
+script = ExtResource("2_3oll3")

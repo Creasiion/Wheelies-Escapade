@@ -11,6 +11,8 @@ var move_speed: float
 var current_wheel_index := 0
 var hud: Node = null
 
+@export var tire_use_range := 5.0
+
 func _ready():
 	if wheel_options.size() > 0:
 		wheels = wheel_options[current_wheel_index]
@@ -36,12 +38,15 @@ func _physics_process(_delta: float) -> void:
 	# Switch wheels when Down Arrow or S is pressed
 	if Input.is_action_just_pressed("ui_down"):
 		switch_wheels()
+	if Input.is_action_just_pressed("ui_up"):
+		use_tire()
 
 func check_collisions():
 	if not $CollideCooldown.is_stopped():
 		return  # Cooldown active
-
+		
 	var collision = get_last_slide_collision()
+
 	if collision:
 		var collider = collision.get_collider()
 		if collider:
@@ -50,12 +55,14 @@ func check_collisions():
 			$CollideCooldown.start()
 
 			velocity.z = 0 # Don't go backwards after colliding
-
+			
+			var body = collider.get_node_or_null("StaticBody3D")
+			if body:
+				body.collision_layer = 0
+				body.collision_mask  = 0
 			if stamina <= 0:
 				print("GAME OVER!")
 				get_tree().quit()
-
-
 
 func switch_wheels():
 	current_wheel_index = (current_wheel_index + 1) % wheel_options.size()
@@ -71,6 +78,21 @@ func apply_wheels():
 	$Sprite3D.texture = wheels.character_sprite
 	update_hud()
 		
+
+func use_tire():
+	if stamina <= 5:
+		return
+	var in_range = false
+	for tire in get_tree().get_nodes_in_group("tires"):
+		if tire.visible and global_transform.origin.distance_to(tire.global_transform.origin) <= tire_use_range:
+			in_range = true
+			break
+	if not in_range:
+		return
+	stamina -= 5
+	update_hud()
+	var tc = get_node("/root/World/TerrainController") as TerrainController
+	tc.clear_obstacles_next_blocks(3)
 
 func update_hud():
 	if not hud:

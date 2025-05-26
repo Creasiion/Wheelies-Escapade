@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://dvmhjo6d8kset"]
+
+[sub_resource type="TorusMesh" id="TorusMesh_307ht"]
+inner_radius = 0.2
+outer_radius = 0.15
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_307ht"]
+albedo_color = Color(1, 0.698039, 0.0235294, 1)
+metallic = 1.0
+roughness = 0.2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_307ht"]
+radius = 0.2
+
+[node name="GoldenRing" type="Area3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("TorusMesh_307ht")
+surface_material_override/0 = SubResource("StandardMaterial3D_307ht")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_307ht")

@@ -12,7 +12,7 @@ const POOL_SIZE_PER_TYPE := 5
 @export var recycle_distance: float = 20.0
 @export_dir var path_blocks_folder: String = "res://Paths"
 
-# Pools and State
+# Pools, State, and Obstacles
 var TerrainBlocks: Array[PackedScene] = []
 var terrain_pools: Dictionary = {}
 var terrain_belt: Array[Node3D] = []
@@ -20,12 +20,15 @@ var current_exit_transform: Transform3D
 var player: Node3D
 var last_entry_block: Node3D = null
 var last_snapped_yaw: float = 0.0
+var obstacle_spawner: Node
 
 func _ready() -> void:
 	player = get_node_or_null("/root/World/Player")
+	obstacle_spawner = get_node("ObstacleSpawner")
 	_load_path_blocks(path_blocks_folder)
 	_initialize_pools()
 	_init_blocks(num_terrain_blocks)
+	_load_path_blocks(path_blocks_folder)
 
 func _physics_process(_delta: float) -> void:
 	if player:
@@ -78,6 +81,8 @@ func _init_blocks(count: int) -> void:
 		block.visible = true
 		block.global_position.y = 0
 		terrain_belt.append(block)
+		if i > 1:
+			obstacle_spawner.spawn_on_block(block)
 		
 		if block.name == "ForkPath":
 			_wire_fork_branches(block)
@@ -100,6 +105,10 @@ func _manage_terrain(player_z: float) -> void:
 	while terrain_belt.size() > 0 and terrain_belt[0].global_position.z < player_z - recycle_distance:
 		var old_block = terrain_belt.pop_front()
 		old_block.visible = false
+		
+		for child in old_block.get_children(): # Getting rid of obstacles
+			if child.name.begins_with("Obstacle_"):
+				child.visible = false
 
 	# Only add blocks if needed
 	if not _needs_more_blocks_ahead(player_z):
@@ -123,6 +132,7 @@ func _manage_terrain(player_z: float) -> void:
 	new_block.global_position.y = 0
 	new_block.visible = true
 	terrain_belt.append(new_block)
+	obstacle_spawner.spawn_on_block(new_block)
 	
 	if new_block.name == "ForkPath":
 		_wire_fork_branches(new_block)
@@ -133,6 +143,18 @@ func _manage_terrain(player_z: float) -> void:
 	var exit_marker = _get_exit_marker(new_block)
 	if exit_marker:
 		current_exit_transform = exit_marker.global_transform
+
+func clear_obstacles_next_blocks(count: int) -> void:
+	for i in range(min(count, terrain_belt.size())):
+		var block = terrain_belt[i]
+		for obs in block.get_children():
+			if obs.is_in_group("obstacle"):
+				obs.visible = false
+				# disable collision if you pooled
+				if obs.has_method("set_collision_layer"):
+					obs.set_collision_layer(0)
+					obs.set_collision_mask(0)
+
 
 func _pick_next_scene() -> PackedScene:
 	var last = terrain_belt.back()
