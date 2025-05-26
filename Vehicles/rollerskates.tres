@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Wheels" load_steps=2 format=3 uid="uid://bs1fkwv3sfbm4"]
+[gd_resource type="Resource" script_class="WheelStrategy" load_steps=2 format=3 uid="uid://bs1fkwv3sfbm4"]
 
 [ext_resource type="Script" uid="uid://caj8wn8i3kdfo" path="res://Vehicles/Wheels.gd" id="1_y8vs1"]
 

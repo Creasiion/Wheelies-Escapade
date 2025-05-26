@@ -3,10 +3,10 @@ extends CharacterBody3D
 ## Simple left/right character controller
 ##
 
-@export var wheel_options: Array[Wheels] #to support multiple wheel types
+@export var wheel_options: Array[WheelStrategy] #to support multiple wheel types
 
 var save_manager: Node
-var wheels: Wheels
+var wheels: WheelStrategy
 var stamina: int
 var move_speed: float
 var current_wheel_index := 0
@@ -26,13 +26,12 @@ func _ready():
 	
 	if wheel_options.size() > 0:
 		wheels = wheel_options[current_wheel_index]
-	apply_wheels()
+		wheels.apply_to(self)
 	
 	hud = get_node_or_null("/root/World/Ingame UI")
 	if hud:
 		hud.show()
 		
-	apply_wheels()
 	# Stamina and Score timer
 	$StaminaRegen.start()
 	var score_timer = Timer.new()
@@ -100,17 +99,7 @@ func check_collisions():
 func switch_wheels():
 	current_wheel_index = (current_wheel_index + 1) % wheel_options.size()
 	wheels = wheel_options[current_wheel_index]
-	apply_wheels()
-	
-func apply_wheels():
-	if stamina == 0:
-		stamina = wheels.max_stamina
-	else:
-		stamina = min(stamina, wheels.max_stamina)
-	move_speed = wheels.move_speed
-	$Sprite3D.texture = wheels.character_sprite
-	update_hud()
-		
+	wheels.apply_to(self)
 
 func use_tire():
 	if stamina <= 5:
