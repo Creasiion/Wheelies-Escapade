@@ -1,3 +1,4 @@
+Node
 Sprite3D
 CollisionShape3D
 MeshInstance3D
@@ -6,10 +7,8 @@ AnimationPlayer
 CSGCylinder3D
 Node3D
 StaticBody3D
-Node
 Label3D
 CSGBox3D
 Marker3D
 Timer
 Label
-ProgressBar

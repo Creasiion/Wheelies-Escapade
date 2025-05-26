@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://c0gq8lfxiwhso"]
+[gd_scene load_steps=15 format=3 uid="uid://c0gq8lfxiwhso"]
 
 [ext_resource type="Script" uid="uid://kr6cac70yja3" path="res://player.gd" id="1_f3sb7"]
 [ext_resource type="Script" uid="uid://caj8wn8i3kdfo" path="res://Vehicles/Wheels.gd" id="2_036b0"]
@@ -7,6 +7,7 @@
 [ext_resource type="Resource" uid="uid://bs1fkwv3sfbm4" path="res://Vehicles/rollerskates.tres" id="4_pkg7o"]
 [ext_resource type="Script" uid="uid://cgv6vfg4jl1t5" path="res://CameraPivot.gd" id="5_pkg7o"]
 [ext_resource type="PackedScene" uid="uid://dnd6bfxj2jk12" path="res://HUD.tscn" id="6_dwbse"]
+[ext_resource type="Script" uid="uid://mcuc7mouvxj5" path="res://SaveManager.gd" id="8_gbfbk"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gv5m4"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -70,5 +71,8 @@ transform = Transform3D(0.989536, 0, -0.144287, 0, 1, 0, 0.144287, 0, 0.989536, 
 mesh = SubResource("PlaneMesh_fj7yv")
 
 [node name="Ingame UI" parent="." instance=ExtResource("6_dwbse")]
+
+[node name="SaveManager" type="Node" parent="."]
+script = ExtResource("8_gbfbk")
 
 [connection signal="timeout" from="Player/StaminaRegen" to="Player" method="_on_stamina_regen_timeout"]

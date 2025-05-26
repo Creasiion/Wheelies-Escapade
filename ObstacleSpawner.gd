@@ -68,10 +68,6 @@ func spawn_on_block(block: Node3D) -> void:
 	
 	var local_x = randf_range(-hx, hx)
 	var local_z = randf_range(-hz, hz)
-	
-	print("-- resource_scenes:")
-	for s in resource_scenes:
-		print("  - ", s.resource_path.get_file().get_basename())
 
 	for i in range(per_block_obstacles):
 		var sc = obstacle_scenes[randi()%obstacle_scenes.size()]

@@ -5,6 +5,7 @@ extends CharacterBody3D
 
 @export var wheel_options: Array[Wheels] #to support multiple wheel types
 
+var save_manager: Node
 var wheels: Wheels
 var stamina: int
 var move_speed: float
@@ -16,14 +17,23 @@ var score: int = 0
 @export var score_rate_per_sec := 1
 
 func _ready():
+	save_manager = get_node("/root/World/SaveManager")
+	var data = save_manager.load_game()
+	if data.has("score"):
+		score = data.score
+		stamina = data.stamina
+		current_wheel_index = data.wheel_index
+	
 	if wheel_options.size() > 0:
 		wheels = wheel_options[current_wheel_index]
-		
+	apply_wheels()
+	
 	hud = get_node_or_null("/root/World/Ingame UI")
 	if hud:
 		hud.show()
 		
 	apply_wheels()
+	# Stamina and Score timer
 	$StaminaRegen.start()
 	var score_timer = Timer.new()
 	score_timer.wait_time = 1.0
@@ -31,6 +41,20 @@ func _ready():
 	score_timer.autostart = true
 	add_child(score_timer)
 	score_timer.connect("timeout", Callable(self, "_on_score_tick"))
+
+func _input(event):
+	if event is InputEventKey and event.pressed:
+		if event.keycode == KEY_M: # press "M" to save
+			save_manager.save_game(score, stamina, current_wheel_index)
+		elif event.keycode == KEY_L: # press “L” to load
+			var data = save_manager.load_game()
+			if data.has("score"):
+				score = data.score
+				stamina = data.stamina
+				current_wheel_index = data.wheel_index
+				switch_wheels()
+				update_hud()
+
 
 func _physics_process(_delta: float) -> void:
 
@@ -70,6 +94,7 @@ func check_collisions():
 				body.collision_mask  = 0
 			if stamina <= 0:
 				print("GAME OVER!")
+				save_manager.clear_save()
 				get_tree().quit()
 
 func switch_wheels():
