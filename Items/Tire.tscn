@@ -30,6 +30,7 @@ shape = SubResource("SphereShape3D_16w2n")
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 
 [node name="Glow" type="Sprite3D" parent="."]
+visible = false
 material_override = SubResource("StandardMaterial3D_v7few")
 pixel_size = 0.0006
 billboard = 1
