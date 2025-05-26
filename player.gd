@@ -10,8 +10,10 @@ var stamina: int
 var move_speed: float
 var current_wheel_index := 0
 var hud: Node = null
+var score: int = 0
 
 @export var tire_use_range := 5.0
+@export var score_rate_per_sec := 1
 
 func _ready():
 	if wheel_options.size() > 0:
@@ -23,6 +25,12 @@ func _ready():
 		
 	apply_wheels()
 	$StaminaRegen.start()
+	var score_timer = Timer.new()
+	score_timer.wait_time = 1.0
+	score_timer.one_shot = false
+	score_timer.autostart = true
+	add_child(score_timer)
+	score_timer.connect("timeout", Callable(self, "_on_score_tick"))
 
 func _physics_process(_delta: float) -> void:
 
@@ -103,10 +111,13 @@ func update_hud():
 	stamina_bar.get_node("StaminaLabelText").text = "Stamina: " + str(stamina) + " / " + str(wheels.max_stamina)
 	
 	hud.get_node("WheelsLabel").text = "Wheels: " + wheels.display_name
-
-	#hud.get_node("ScoreLabel").text = "Score: " + str(score)
+	hud.get_node("ScoreLabel").text = "Score: " + str(score)
 
 func _on_stamina_regen_timeout() -> void:
 	if stamina < wheels.max_stamina:
 		stamina += 1
 		update_hud()
+		
+func _on_score_tick() -> void:
+	score += score_rate_per_sec
+	update_hud()

@@ -15,9 +15,10 @@ radius = 0.2
 [node name="GoldenRing" type="Area3D"]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.195658, 0)
 mesh = SubResource("TorusMesh_307ht")
 surface_material_override/0 = SubResource("StandardMaterial3D_307ht")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.188956, 0)
 shape = SubResource("SphereShape3D_307ht")

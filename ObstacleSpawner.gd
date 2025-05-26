@@ -1,12 +1,12 @@
 extends Node
 
 @export var obstacle_folder: String = "res://Obstacles"
-@export var resource_folder: String = "res://Resources"
+@export var item_folder: String = "res://Items"
 @export var per_block: int = 2 # Number of blocks to appear on a single path
 
 @export var per_block_obstacles := 2
 @export var per_block_rings := 3
-@export var tire_chance := 0.35
+@export var tire_chance := 0.1
 
 # Pool sizes
 @export var pool_size_per_obstacle := 10
@@ -25,7 +25,7 @@ var resource_pools: Dictionary = {}
 
 func _ready() -> void:
 	_load_and_pool(obstacle_folder, obstacle_scenes, obstacle_pools, pool_size_per_obstacle, Node3D)
-	_load_and_pool(resource_folder, resource_scenes, resource_pools, pool_size_per_resource, Area3D)
+	_load_and_pool(item_folder, resource_scenes, resource_pools, pool_size_per_resource, Area3D)
 
 
 # Helper function to load all pools!
@@ -119,7 +119,10 @@ func _on_tire_picked(body, tire):
 	body.tire_charges += 1; body.update_hud()
 
 func _on_ring_picked(body, ring):
-	if body.name != "Player": return
-	ring.visible = false; ring.get_parent().remove_child(ring); add_child(ring)
+	if body.name != "Player": 
+		return
+	ring.visible = false; 
+	ring.get_parent().call_deferred("remove_child", ring)
+	call_deferred("add_child", ring)
 	body.score += 10; 
 	body.update_hud()
