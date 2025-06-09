@@ -77,24 +77,33 @@ func check_collisions():
 		return  # Cooldown active
 		
 	var collision = get_last_slide_collision()
+	if not collision:
+		return
+	
+	var collider = collision.get_collider()
+	if not collider:
+		return
+		
+	if collider.is_in_group("obstacle"):
+		collider.visible = false
+		if collider.has_method("set_collision_layer"):
+			collider.collision_layer = 0
+			collider.collision_mask = 0
+		return
+	
+	
+	stamina -= 15
+	update_hud()
+	$CollideCooldown.start()
+	velocity.z = 0  # don’t bounce backwards
+	
+	if stamina <= 0:
+		print("GAME OVER!")
+		save_manager.clear_save()
+		get_tree().quit()
 
-	if collision:
-		var collider = collision.get_collider()
-		if collider:
-			stamina -= 15
-			update_hud()
-			$CollideCooldown.start()
 
-			velocity.z = 0 # Don't go backwards after colliding
-			
-			var body = collider.get_node_or_null("StaticBody3D")
-			if body:
-				body.collision_layer = 0
-				body.collision_mask  = 0
-			if stamina <= 0:
-				print("GAME OVER!")
-				save_manager.clear_save()
-				get_tree().quit()
+
 
 func switch_wheels():
 	current_wheel_index = (current_wheel_index + 1) % wheel_options.size()

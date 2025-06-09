@@ -23,6 +23,8 @@ var obstacle_pools: Dictionary = {}
 var resource_scenes: Array[PackedScene] = []
 var resource_pools: Dictionary = {}
 
+var tire_charges: int = 0
+
 func _ready() -> void:
 	_load_and_pool(obstacle_folder, obstacle_scenes, obstacle_pools, pool_size_per_obstacle, Node3D)
 	_load_and_pool(item_folder, resource_scenes, resource_pools, pool_size_per_resource, Area3D)
@@ -73,6 +75,7 @@ func spawn_on_block(block: Node3D) -> void:
 		var sc = obstacle_scenes[randi()%obstacle_scenes.size()]
 		var obs = _get_pooled(sc, obstacle_pools)
 		_place(obs, block, hx, hz, true)
+		obs.add_to_group("obstacle")
 		
 	for sc in resource_scenes:
 		var name = sc.resource_path.get_file().get_basename()
@@ -111,7 +114,9 @@ func _place(inst:Node, block:Node3D, hx:float, hz:float, is_obstacle=false):
 # handlers (same as before)
 func _on_tire_picked(body, tire):
 	if body.name != "Player": return
-	tire.visible = false; tire.get_parent().remove_child(tire); add_child(tire)
+	tire.visible = false; 
+	tire.get_parent().remove_child(tire); 
+	add_child(tire)
 	body.tire_charges += 1; body.update_hud()
 
 func _on_ring_picked(body, ring):
