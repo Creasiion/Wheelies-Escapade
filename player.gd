@@ -103,6 +103,7 @@ func switch_wheels():
 
 func use_tire():
 	if stamina <= 5:
+		print("Not enough stamina!")
 		return
 	var in_range = false
 	for tire in get_tree().get_nodes_in_group("tires"):
