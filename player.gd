@@ -12,6 +12,8 @@ var move_speed: float
 var current_wheel_index := 0
 var hud: Node = null
 var score: int = 0
+# track how many tires the player holds
+var tire_charges: int = 0
 
 @export var tire_use_range := 5.0
 @export var score_rate_per_sec := 1
@@ -73,9 +75,6 @@ func _physics_process(_delta: float) -> void:
 		use_tire()
 
 func check_collisions():
-	if not $CollideCooldown.is_stopped():
-		return  # Cooldown active
-		
 	var collision = get_last_slide_collision()
 	if not collision:
 		return
@@ -89,13 +88,19 @@ func check_collisions():
 		if collider.has_method("set_collision_layer"):
 			collider.collision_layer = 0
 			collider.collision_mask = 0
+			
+		if $CollideCooldown.is_stopped():
+			stamina -= 15
+			update_hud()
+			velocity.z = 0
+			if stamina <= 0:
+				print("GAME OVER!")
+				save_manager.clear_save()
+				get_tree().quit()
+			$CollideCooldown.start()
+			
 		return
 	
-	
-	stamina -= 15
-	update_hud()
-	$CollideCooldown.start()
-	velocity.z = 0  # don’t bounce backwards
 	
 	if stamina <= 0:
 		print("GAME OVER!")
