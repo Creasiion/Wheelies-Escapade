@@ -1,3 +1,8 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+.DS_Store
+/.godot/mono/metadata
+.godot/editor/script_editor_cache.cfg
+.godot/editor/filesystem_update4
+.godot/editor/filesystem_cache10
