@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://brnm2yimghgne"]
 
 [ext_resource type="Script" uid="uid://d3vvvwxwso7ak" path="res://homescreen.gd" id="1_wmn14"]
-[ext_resource type="VideoStream" path="res://Resources/WheeliesInTrouble.ogv" id="2_ug7h0"]
+[ext_resource type="VideoStream" uid="uid://xbvixixl4yve" path="res://Resources/WheeliesInTrouble.ogv" id="2_ug7h0"]
 
 [node name="Homescreen" type="Control"]
 layout_mode = 3
