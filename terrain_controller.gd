@@ -85,13 +85,13 @@ func _init_blocks(count: int) -> void:
 		if i > 1:
 			obstacle_spawner.spawn_on_block(block)
 		
-		if block.get_meta("type") == "ForkPath":
-			_wire_fork_branches(block)
-		else:
-			_wire_entry_pivot(block)
-			var exit_marker = _get_exit_marker(block)
-			if exit_marker:
-				current_exit_transform = exit_marker.global_transform
+		#if block.get_meta("type") == "ForkPath":
+			#_wire_fork_branches(block)
+		#else:
+		_wire_entry_pivot(block)
+		var exit_marker = _get_exit_marker(block)
+		if exit_marker:
+			current_exit_transform = exit_marker.global_transform
 		
 		if i==0 and player: # Positioning player's start point
 			var spawn_pos = entry.global_transform.origin
@@ -117,12 +117,12 @@ func _manage_terrain(player_z: float) -> void:
 	var last_block = terrain_belt.back()
 	var scene = _pick_next_scene()
 
-	if last_block.get_meta("type") == "ForkPath" and last_block.has_meta("last_direction"):
-		var dir = last_block.get_meta("last_direction")  # "left" or "right"
-		var exit_node = last_block.get_node_or_null(dir.capitalize() + "Exit")
-		if exit_node:
-			current_exit_transform = exit_node.global_transform
-		last_block.remove_meta("last_direction")
+	#if last_block.get_meta("type") == "ForkPath" and last_block.has_meta("last_direction"):
+		#var dir = last_block.get_meta("last_direction")  # "left" or "right"
+		#var exit_node = last_block.get_node_or_null(dir.capitalize() + "Exit")
+		#if exit_node:
+			#current_exit_transform = exit_node.global_transform
+		#last_block.remove_meta("last_direction")
 
 	# Placing block on path
 	var new_block = _get_pooled_block(scene)
@@ -135,24 +135,24 @@ func _manage_terrain(player_z: float) -> void:
 	terrain_belt.append(new_block)
 	obstacle_spawner.spawn_on_block(new_block)
 	
-	if new_block.get_meta("type") == "ForkPath":
-		_wire_fork_branches(new_block)
-	else:
-		_wire_entry_pivot(new_block)
+	#if new_block.get_meta("type") == "ForkPath":
+		#_wire_fork_branches(new_block)
+	#else:
+	_wire_entry_pivot(new_block)
 		# Updating exit
-		var exit_marker = _get_exit_marker(new_block)
-		if exit_marker:
-			current_exit_transform = exit_marker.global_transform
+	var exit_marker = _get_exit_marker(new_block)
+	if exit_marker:
+		current_exit_transform = exit_marker.global_transform
 	
 		
 
 func clear_obstacles_next_blocks(count: int) -> void:
-	for i in range(min(count, terrain_belt.size())):
-		var block = terrain_belt[i]
+	var ahead = terrain_belt.filter( func(b):
+		return b.global_position.z > player.global_position.z)
+	for block in ahead.slice(0, count):
 		for obs in block.get_children():
 			if obs.is_in_group("obstacle"):
 				obs.visible = false
-				# disable collision if you pooled
 				if obs.has_method("set_collision_layer"):
 					obs.set_collision_layer(0)
 					obs.set_collision_mask(0)
@@ -161,18 +161,17 @@ func clear_obstacles_next_blocks(count: int) -> void:
 func _pick_next_scene() -> PackedScene:
 	var last = terrain_belt.back()
 	var last_type = last.get_meta("type")
-	var can_fork = last_type == "StraightPath"
-	var roll = randf()
+	#var can_fork = last_type == "StraightPath"
 	
-	if can_fork and randf() < 0.0001:
-		print("    ↪ spawning FORK")
-		return _get_scene_by_name("ForkPath")
+	#if can_fork and randf() < 0.0001:
+		#print("    ↪ spawning FORK")
+		#return _get_scene_by_name("ForkPath")
 
 	# otherwise pick among left, right, straight
 	var pool: Array[PackedScene] = []
 	for scene in TerrainBlocks:
 		var name = scene.resource_path.get_file().get_basename()
-		if not can_fork and name == "ForkPath":
+		if name == "ForkPath":
 			continue
 		pool.append(scene)
 	return pool.pick_random()
@@ -185,8 +184,8 @@ func _needs_more_blocks_ahead(player_z: float) -> bool:
 		
 	var exit_z = current_exit_transform.origin.z
 	var prev_block = terrain_belt.back()
-	if prev_block.get_meta("type") == "ForkPath":
-		return prev_block.has_meta("last_direction")
+	#if prev_block.get_meta("type") == "ForkPath":
+		#return prev_block.has_meta("last_direction")
 
 	return exit_z > player_z - (lookahead_blocks * BLOCK_LENGTH)
 
@@ -230,8 +229,8 @@ func _on_entry_zone_entered(body: Node, block_ref: Node3D) -> void:
 		return
 	last_entry_block = block_ref
 	
-	if block_ref.get_meta("type") == "ForkPath":
-		return
+	#if block_ref.get_meta("type") == "ForkPath":
+		#return
 
 	# compute snapped yaw…
 	var raw_yaw = current_exit_transform.basis.get_euler().y
