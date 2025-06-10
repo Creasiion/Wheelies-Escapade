@@ -130,6 +130,13 @@ func _ensure_tire_material_unique(tire: Node) -> void:
 
 	var mesh_inst = tire.get_node_or_null("MeshInstance3D") as MeshInstance3D
 	if mesh_inst:
+		print(">>> material_override for", tire.name, "is:", mesh_inst.material_override)
+		print(">>> surface_override_material(0) for", tire.name, "is:", mesh_inst.get_surface_override_material(0))
+		if mesh_inst.mesh:
+			print(">>> mesh.surface_get_material(0) for", tire.name, "is:", mesh_inst.mesh.surface_get_material(0))
+	else:
+		print(">>> No MeshInstance3D found under", tire.name)
+	if mesh_inst:
 		print("Duplicating material for tire:", tire.name)
 		var override_mat = mesh_inst.material_override
 		if override_mat and override_mat is ShaderMaterial:
