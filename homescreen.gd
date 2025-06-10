@@ -36,7 +36,7 @@ func _on_tutorial_pressed():
 func _on_load_pressed():
 	var save = SaveManager.load_game()
 	if save and save.has("score"):
-		get_tree().change_scene("res://Scenes/Game.tscn")
+		get_tree().change_scene_to_file("res://world.tscn")
 	else:
 		$PopupMessage.get_node("Label").text = "No saved game to load."
 		$PopupMessage.popup_centered()
