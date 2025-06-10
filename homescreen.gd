@@ -30,7 +30,7 @@ func _on_tutorial_pressed():
 		"A/D or ←/→ — Move\n" + \
 		"W or ↑ — Use tire\n" + \
 		"S or ↓ — Switch wheels\n" + \
-		"P — Pause & save"
+		"M — Save"
 	$PopupTutorial.popup_centered()
 
 func _on_load_pressed():
