@@ -19,8 +19,11 @@ var tire_charges: int = 0
 
 @export var tire_use_range := 5.0
 @export var score_rate_per_sec := 1
+@onready var glow_mat := preload("res://Shaders/TireGlow.gdshader")
 
 func _ready():
+	if not is_in_group("player"):
+		add_to_group("player")
 	save_manager = get_node("/root/World/SaveManager")
 	var data = save_manager.load_game()
 	if data.has("score"):
@@ -72,7 +75,7 @@ func _physics_process(_delta: float) -> void:
 	# Switch wheels when Down Arrow or S is pressed
 	if Input.is_action_just_pressed("ui_down"):
 		switch_wheels()
-	if Input.is_action_just_pressed("ui_up"):
+	if Input.is_action_just_pressed("Interact"):
 		use_tire()
 
 func _process(delta: float) -> void:
@@ -80,12 +83,11 @@ func _process(delta: float) -> void:
 		if not tire.visible:
 			continue
 		var dist = global_transform.origin.distance_to(tire.global_transform.origin)
-		var glow_mat = tire.get_node("MeshInstance3D").material_override
+		var mesh = tire.get_node("MeshInstance3D")
 		if dist <= tire_glow_range:
-			var strength = (tire_glow_range - dist) / tire_glow_range * 5.0
-			glow_mat.set_shader_parameter("glow_strength", strength)
+			mesh.material_override = glow_mat
 		else:
-			glow_mat.set_shader_parameter("glow_strength", 0.0)
+			mesh.material_override = null
 
 func check_collisions():
 	var collision = get_last_slide_collision()
@@ -128,6 +130,7 @@ func switch_wheels():
 	wheels.apply_to(self)
 
 func use_tire():
+	print("use_tire() called, stamina=", stamina)
 	if stamina <= tire_stamina_cost:
 		print("Not enough stamina!")
 		return

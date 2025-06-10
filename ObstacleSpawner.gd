@@ -78,6 +78,7 @@ func spawn_on_block(block: Node3D) -> void:
 		if name == "Tire":
 			if randf() < tire_chance:
 				var tire = _get_pooled(sc, resource_pools)
+				_ensure_tire_material_unique(tire)
 				_place(tire, block, hx, hz)
 				tire.add_to_group("tires")
 				#var sig = tire.body_entered
@@ -122,3 +123,29 @@ func _on_ring_picked(body, ring):
 	call_deferred("add_child", ring)
 	body.score += 10; 
 	body.update_hud()
+
+func _ensure_tire_material_unique(tire: Node) -> void:
+	if tire.has_meta("mat_dup_done"):
+		return
+
+	var mesh_inst = tire.get_node_or_null("MeshInstance3D") as MeshInstance3D
+	if mesh_inst:
+		print("Duplicating material for tire:", tire.name)
+		var override_mat = mesh_inst.material_override
+		if override_mat and override_mat is ShaderMaterial:
+			mesh_inst.material_override = override_mat.duplicate()
+			tire.set_meta("mat_dup_done", true)
+			return
+			
+		var m = mesh_inst.mesh
+		if m:
+			print("Other Duplicating material for tire:", tire.name)
+			var surface_count = m.get_surface_count()
+			if surface_count > 0:
+				var orig = m.surface_get_material(0)
+				if orig and orig is ShaderMaterial:
+					var dup = orig.duplicate()
+					mesh_inst.set_surface_override_material(0, dup)
+					tire.set_meta("mat_dup_done", true)
+					return
+		print("Warning: No ShaderMaterial found on", tire.name)
