@@ -250,7 +250,7 @@ func _on_zone_exited(body: Node, block_ref: Node3D, dir: String) -> void:
 		block_ref.set_meta(dir + "_armed", true)
 
 func _on_branch_zone_entered(body, block_ref, dir):
-	print("🔥 _on_branch_zone_entered fired for ", dir)
+	print("_on_branch_zone_entered fired for ", dir)
 	if body != player or block_ref == last_entry_block:
 		return
 	if not block_ref.get_meta(dir + "_armed"):
