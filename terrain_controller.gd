@@ -164,7 +164,7 @@ func _pick_next_scene() -> PackedScene:
 	var can_fork = last_type == "StraightPath"
 	var roll = randf()
 	
-	if can_fork and randf() < 0.01:
+	if can_fork and randf() < 0.0001:
 		print("    ↪ spawning FORK")
 		return _get_scene_by_name("ForkPath")
 

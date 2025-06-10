@@ -1,0 +1,89 @@
+[gd_scene load_steps=3 format=3 uid="uid://brnm2yimghgne"]
+
+[ext_resource type="Script" uid="uid://d3vvvwxwso7ak" path="res://homescreen.gd" id="1_wmn14"]
+[ext_resource type="VideoStream" path="res://Resources/WheeliesInTrouble.ogv" id="2_ug7h0"]
+
+[node name="Homescreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wmn14")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 222.0
+offset_top = 42.0
+offset_right = 926.0
+offset_bottom = 177.0
+theme_override_font_sizes/font_size = 75
+text = "Wheelie's Escapade"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 399.0
+offset_top = 420.0
+offset_right = 738.0
+offset_bottom = 664.0
+
+[node name="PlayIntroButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Play Intro"
+
+[node name="TutorialButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Tutorial"
+
+[node name="NewGameButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "New Game"
+
+[node name="LoadGameButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Load Game"
+
+[node name="LoadGameInfo" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Current Score:"
+horizontal_alignment = 1
+
+[node name="QuitGameButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Quit"
+
+[node name="VideoPopup" type="PopupPanel" parent="."]
+initial_position = 2
+size = Vector2i(968, 968)
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="VideoPopup"]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 964.0
+offset_bottom = 964.0
+
+[node name="IntroVideo" type="VideoStreamPlayer" parent="VideoPopup/AspectRatioContainer"]
+layout_mode = 2
+stream = ExtResource("2_ug7h0")
+expand = true
+
+[node name="CloseVideoButton" type="Button" parent="VideoPopup/AspectRatioContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "X Leave Intro"
+
+[node name="PopupTutorial" type="PopupPanel" parent="."]
+
+[node name="Label" type="Label" parent="PopupTutorial"]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 96.0
+offset_bottom = 96.0

@@ -11,9 +11,18 @@ config_version=5
 [application]
 
 config/name="Wheelie's Escapade Project"
-run/main_scene="res://world.tscn"
+run/main_scene="uid://brnm2yimghgne"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+SaveManager="*res://SaveManager.gd"
+
+[display]
+
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
 
 [dotnet]
 

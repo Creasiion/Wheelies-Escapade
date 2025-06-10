@@ -102,6 +102,8 @@ func check_collisions():
 		return
 	
 	
+	  # don’t bounce backwards
+	
 	if stamina <= 0:
 		print("GAME OVER!")
 		save_manager.clear_save()

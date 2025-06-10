@@ -42,6 +42,8 @@ shadow_enabled = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.04713, 0)
 script = ExtResource("1_f3sb7")
 wheel_options = Array[ExtResource("2_036b0")]([ExtResource("3_dwbse"), ExtResource("4_pkg7o")])
+tire_use_range = null
+score_rate_per_sec = null
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
 shape = SubResource("CapsuleShape3D_gv5m4")
@@ -66,6 +68,10 @@ script = ExtResource("5_pkg7o")
 transform = Transform3D(0.989536, 0, -0.144287, 0, 1, 0, 0.144287, 0, 0.989536, -3.32327, 0.24958, 3.32679)
 
 [node name="TerrainController" parent="." instance=ExtResource("3_tlwt5")]
+num_terrain_blocks = 4
+lookahead_blocks = 2
+recycle_distance = 20.0
+path_blocks_folder = "res://Paths"
 
 [node name="General Flooring" type="MeshInstance3D" parent="."]
 mesh = SubResource("PlaneMesh_fj7yv")
