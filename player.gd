@@ -9,6 +9,8 @@ var flash_mat: ShaderMaterial = null
 @onready var mesh_inst: MeshInstance3D = $MeshInstance3D
 var hit_cooldown: float = 1.0
 var is_on_flash := false
+@onready var hit_sound_player: AudioStreamPlayer3D = $HitSoundPlayer
+
 
 var save_manager: Node
 var wheels: WheelStrategy
@@ -122,6 +124,7 @@ func check_collisions():
 				print("GAME OVER!")
 				save_manager.clear_save()
 				get_tree().quit()
+			_play_hit_sound()
 			_start_hit_flash()
 			$CollideCooldown.start()
 			
@@ -153,6 +156,12 @@ func _on_flash_tween_finished():
 		flash_mat.set_shader_parameter("flash_active", false)
 		flash_mat.set_shader_parameter("flash_progress", 0.0)
 	is_on_flash = false
+
+func _play_hit_sound():
+	if hit_sound_player:
+		hit_sound_player.stop()
+		hit_sound_player.play()
+
 
 func switch_wheels():
 	current_wheel_index = (current_wheel_index + 1) % wheel_options.size()
