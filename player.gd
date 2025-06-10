@@ -1,11 +1,14 @@
 extends CharacterBody3D
-##
-## Simple left/right character controller
-##
 
 @export var wheel_options: Array[WheelStrategy] #to support multiple wheel types
 @export var tire_glow_range := 5.0
 @export var tire_stamina_cost := 20
+
+@onready var flash_shader: Shader = preload("res://Shaders/PlayerFlash.gdshader")
+var flash_mat: ShaderMaterial = null
+@onready var mesh_inst: MeshInstance3D = $MeshInstance3D
+var hit_cooldown: float = 1.0
+var is_on_flash := false
 
 var save_manager: Node
 var wheels: WheelStrategy
@@ -24,6 +27,13 @@ var tire_charges: int = 0
 func _ready():
 	if not is_in_group("player"):
 		add_to_group("player")
+	if mesh_inst:
+		var mat = mesh_inst.material_override
+		if mat and mat is ShaderMaterial:
+			flash_mat = mat
+		else:
+			push_warning("Expected a ShaderMaterial in Material Override on Player mesh")
+	
 	save_manager = get_node("/root/World/SaveManager")
 	var data = save_manager.load_game()
 	if data.has("score"):
@@ -112,6 +122,7 @@ func check_collisions():
 				print("GAME OVER!")
 				save_manager.clear_save()
 				get_tree().quit()
+			_start_hit_flash()
 			$CollideCooldown.start()
 			
 		return
@@ -123,6 +134,25 @@ func check_collisions():
 		print("GAME OVER!")
 		save_manager.clear_save()
 		get_tree().quit()
+
+func _start_hit_flash():
+	if not flash_mat:
+		return
+	if is_on_flash:
+		return
+	is_on_flash = true
+	flash_mat.set_shader_parameter("flash_active", true)
+	flash_mat.set_shader_parameter("flash_progress", 1.0)
+	
+	var tw = create_tween()
+	tw.tween_property(flash_mat, "shader_parameter/flash_progress", 0.0, hit_cooldown).set_trans(Tween.TRANS_LINEAR)
+	tw.connect("finished", Callable(self, "_on_flash_tween_finished"))
+
+func _on_flash_tween_finished():
+	if flash_mat:
+		flash_mat.set_shader_parameter("flash_active", false)
+		flash_mat.set_shader_parameter("flash_progress", 0.0)
+	is_on_flash = false
 
 func switch_wheels():
 	current_wheel_index = (current_wheel_index + 1) % wheel_options.size()
