@@ -4,6 +4,8 @@ extends CharacterBody3D
 ##
 
 @export var wheel_options: Array[WheelStrategy] #to support multiple wheel types
+@export var tire_glow_range := 5.0
+@export var tire_stamina_cost := 20
 
 var save_manager: Node
 var wheels: WheelStrategy
@@ -56,7 +58,6 @@ func _input(event):
 				switch_wheels()
 				update_hud()
 
-
 func _physics_process(_delta: float) -> void:
 
 	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down") #Only allow movement of left and right
@@ -73,6 +74,18 @@ func _physics_process(_delta: float) -> void:
 		switch_wheels()
 	if Input.is_action_just_pressed("ui_up"):
 		use_tire()
+
+func _process(delta: float) -> void:
+	for tire in get_tree().get_nodes_in_group("tires"):
+		if not tire.visible:
+			continue
+		var dist = global_transform.origin.distance_to(tire.global_transform.origin)
+		var glow_mat = tire.get_node("MeshInstance3D").material_override
+		if dist <= tire_glow_range:
+			var strength = (tire_glow_range - dist) / tire_glow_range * 5.0
+			glow_mat.set_shader_parameter("glow_strength", strength)
+		else:
+			glow_mat.set_shader_parameter("glow_strength", 0.0)
 
 func check_collisions():
 	var collision = get_last_slide_collision()
@@ -109,26 +122,27 @@ func check_collisions():
 		save_manager.clear_save()
 		get_tree().quit()
 
-
-
-
 func switch_wheels():
 	current_wheel_index = (current_wheel_index + 1) % wheel_options.size()
 	wheels = wheel_options[current_wheel_index]
 	wheels.apply_to(self)
 
 func use_tire():
-	if stamina <= 5:
+	if stamina <= tire_stamina_cost:
 		print("Not enough stamina!")
 		return
-	var in_range = false
+	var found_tire = null
 	for tire in get_tree().get_nodes_in_group("tires"):
-		if tire.visible and global_transform.origin.distance_to(tire.global_transform.origin) <= tire_use_range:
-			in_range = true
+		if tire.visible and global_transform.origin.distance_to(tire.global_transform.origin) <= tire_glow_range:
+			found_tire = tire
 			break
-	if not in_range:
+	if not found_tire:
 		return
-	stamina -= 5
+	found_tire.visible = false
+	if found_tire.has_method("set_collision_layer"):
+		found_tire.collision_layer = 0
+		found_tire.collision_mask = 0
+	stamina -= tire_stamina_cost
 	update_hud()
 	var tc = get_node("/root/World/TerrainController") as TerrainController
 	tc.clear_obstacles_next_blocks(3)

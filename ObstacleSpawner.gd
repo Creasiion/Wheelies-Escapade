@@ -6,7 +6,7 @@ extends Node
 
 @export var per_block_obstacles := 2
 @export var per_block_rings := 3
-@export var tire_chance := 0.1
+@export var tire_chance := 0.3
 
 # Pool sizes
 @export var pool_size_per_obstacle := 10
@@ -23,12 +23,9 @@ var obstacle_pools: Dictionary = {}
 var resource_scenes: Array[PackedScene] = []
 var resource_pools: Dictionary = {}
 
-var tire_charges: int = 0
-
 func _ready() -> void:
 	_load_and_pool(obstacle_folder, obstacle_scenes, obstacle_pools, pool_size_per_obstacle, Node3D)
 	_load_and_pool(item_folder, resource_scenes, resource_pools, pool_size_per_resource, Area3D)
-
 
 # Helper function to load all pools!
 func _load_and_pool(folder:String, scenes:Array, pools:Dictionary, size:int, klass):
@@ -60,7 +57,6 @@ func _get_pooled(scene:PackedScene, pools:Dictionary) -> Node:
 	pools[scene].append(inst)
 	return inst
 
-
 func spawn_on_block(block: Node3D) -> void:
 	var margin_x = 1.0
 	var margin_z = 2.0
@@ -84,10 +80,10 @@ func spawn_on_block(block: Node3D) -> void:
 				var tire = _get_pooled(sc, resource_pools)
 				_place(tire, block, hx, hz)
 				tire.add_to_group("tires")
-				var sig = tire.body_entered
-				var cb  = Callable(self, "_on_tire_picked").bind(tire)
-				if not sig.is_connected(cb):
-					sig.connect(cb)
+				#var sig = tire.body_entered
+				#var cb  = Callable(self, "_on_tire_picked").bind(tire)
+				#if not sig.is_connected(cb):
+					#sig.connect(cb)
 		elif name == "GoldenRing":
 			for i in range(per_block_rings):
 				var ring = _get_pooled(sc, resource_pools)
@@ -117,7 +113,6 @@ func _on_tire_picked(body, tire):
 	tire.visible = false; 
 	tire.get_parent().remove_child(tire); 
 	add_child(tire)
-	body.tire_charges += 1; body.update_hud()
 
 func _on_ring_picked(body, ring):
 	if body.name != "Player": 

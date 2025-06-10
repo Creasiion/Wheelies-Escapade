@@ -1,6 +1,12 @@
 [gd_scene load_steps=6 format=3 uid="uid://d73q2hsqs4ws"]
 
-[ext_resource type="Texture2D" uid="uid://vso1tvhtppr6" path="res://Resources/Glow.png" id="1_43dpt"]
+[ext_resource type="Shader" uid="uid://dep853shwl46r" path="res://Shaders/TireGlow.gdshader" id="1_43dpt"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v7few"]
+render_priority = 0
+shader = ExtResource("1_43dpt")
+shader_parameter/glow_color = Color(1, 1, 0, 1)
+shader_parameter/glow_strength = 0.0
 
 [sub_resource type="TorusMesh" id="TorusMesh_16w2n"]
 rings = 32
@@ -11,27 +17,14 @@ albedo_color = Color(0.246068, 0.192496, 0.162046, 1)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_16w2n"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v7few"]
-transparency = 1
-depth_draw_mode = 2
-emission_enabled = true
-emission = Color(0.923497, 0.853489, 1.92523e-06, 1)
-emission_energy_multiplier = 1.21
-
 [node name="Tire" type="Area3D"]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+material_override = SubResource("ShaderMaterial_v7few")
 mesh = SubResource("TorusMesh_16w2n")
 surface_material_override/0 = SubResource("StandardMaterial3D_43dpt")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 shape = SubResource("SphereShape3D_16w2n")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-
-[node name="Glow" type="Sprite3D" parent="."]
-visible = false
-material_override = SubResource("StandardMaterial3D_v7few")
-pixel_size = 0.0006
-billboard = 1
-texture = ExtResource("1_43dpt")
